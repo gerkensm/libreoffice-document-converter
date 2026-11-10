@@ -256,6 +256,9 @@ export class LibreOfficeConverter implements ILibreOfficeConverter {
 
     // Build loader config
     const config = {
+      // Don't start LibreOffice's main(); it races the LibreOfficeKit init (issue #19).
+      // Set here too so a custom wasmLoader gets it, not only the bundled loader.cjs.
+      noInitialRun: true,
       verbose: this.options.verbose,
       print: this.options.verbose ? console.log : () => { },
       printErr: this.options.verbose ? console.error : () => { },

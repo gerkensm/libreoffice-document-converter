@@ -189,6 +189,8 @@ process.on('message', (msg: { type: string; id: string; payload?: any }) => {
 
 // Configure module
 (global as any).Module = {
+  // Don't start LibreOffice's main(); it races the LibreOfficeKit init (issue #19)
+  noInitialRun: true,
   locateFile: (f: string) => f,
   print: verbose ? console.log : () => { },
   printErr: verbose ? console.error : () => { },

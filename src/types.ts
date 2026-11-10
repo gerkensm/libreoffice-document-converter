@@ -206,6 +206,13 @@ export interface ConversionResult {
  * This is the interface for the loader.cjs module that creates the Emscripten module
  */
 export interface WasmLoaderModule {
+  /**
+   * Create the Emscripten module. The converter passes `noInitialRun: true`, and
+   * an implementation must create `Module` with it: LibreOffice's main() must not
+   * run alongside the LibreOfficeKit init (issue #19). The bundled loader.cjs
+   * defaults to `true`; `noInitialRun: false` opts out only when calling that
+   * loader directly.
+   */
   createModule: (config: Record<string, unknown>) => Promise<EmscriptenModule>;
 }
 
@@ -534,6 +541,8 @@ export interface EmscriptenModule {
   // Lifecycle
   onRuntimeInitialized?: () => void;
   calledRun?: boolean;
+  /** Don't call main() after the runtime is ready (LibreOfficeKit is initialized separately) */
+  noInitialRun?: boolean;
 
   // LibreOfficeKit hooks (exported C functions)
   _lok_preinit?: (path: number, args: number) => number;

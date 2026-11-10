@@ -78,6 +78,8 @@ if (isMainThread) {
   globalThis.Worker = Worker;
   
   globalThis.Module = {
+    // Don't start LibreOffice's main(); it races the LibreOfficeKit init (issue #19)
+    noInitialRun: true,
     locateFile: (f) => path.join(wasmDir, f),
     print: (...args) => console.log('LO:', ...args),
     printErr: (...args) => console.error('LO:', ...args),

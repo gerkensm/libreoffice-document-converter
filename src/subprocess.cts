@@ -98,6 +98,8 @@ async function initialize(payload: InitPayload): Promise<void> {
 
   // Configure module
   (global as any).Module = {
+    // Don't start LibreOffice's main(); it races the LibreOfficeKit init (issue #19)
+    noInitialRun: true,
     print: verbose ? console.log : () => {},
     printErr: verbose ? console.error : () => {},
   };

@@ -577,6 +577,8 @@ async function handleInit(msg: WorkerMessage) {
     self.Module = {
       // Tell pthread workers where to load the main module from
       mainScriptUrlOrBlob: sofficeJs,
+      // Don't start LibreOffice's main(); it races the LibreOfficeKit init (issue #19)
+      noInitialRun: true,
       locateFile: (path: string, _scriptDir?: string) => {
         let result: string;
         if (path.endsWith('.wasm')) result = sofficeWasm;
